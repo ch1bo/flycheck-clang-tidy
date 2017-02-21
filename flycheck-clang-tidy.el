@@ -39,21 +39,27 @@ See URL `https://github.com/ch1bo/flycheck-clang-tidy'."
   :command ("clang-tidy"
             ;; TODO: clang-tidy expects config file contents, no way to change path
             ;; (config-file "-config=" flycheck-clang-tidy)
-            ;; TODO: slow! enable it on demand only
-            ;; (option "-p" flycheck-clang-tidy-build-path)
+            (option "-p" flycheck-clang-tidy-build-path)
             source-original)
   :error-patterns
   ((error line-start (file-name) ":" line ":" column ": error: "
-          (message) line-end)
+          (message (one-or-more not-newline) "\n"
+                   (one-or-more not-newline) "\n"
+                   (one-or-more not-newline) "\n"
+                   (one-or-more not-newline))
+          line-end)
    (warning line-start (file-name) ":" line ":" column ": warning: "
-            (message) line-end))
-  :error-filter
-  (lambda (errors)
-    (seq-remove
-     (lambda (err)
-       (string-match-p (rx "file not found") (flycheck-error-message err))
-       )
-     errors))
+            (message (one-or-more not-newline) "\n"
+                     (one-or-more not-newline) "\n"
+                     (one-or-more not-newline) "\n"
+                     (one-or-more not-newline))
+            line-end)
+   (info line-start (file-name) ":" line ":" column ": note: "
+         (message (one-or-more not-newline) "\n"
+                  (one-or-more not-newline) "\n"
+                  (one-or-more not-newline) "\n"
+                  (one-or-more not-newline))
+         line-end))
   :modes (c-mode c++-mode)
   :working-directory flycheck-clang-tidy-find-default-directory
   )
