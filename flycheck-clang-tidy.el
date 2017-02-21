@@ -1,3 +1,19 @@
+;;; flycheck-clang-tidy.el --- Flycheck syntax checker using clang-tidy
+
+;; Author: Sebastian Nagel<sebastian.nagel@ncoding.at>
+;; URL: https://github.com/ch1bo/flycheck-clang-tidy
+;; Keywords: convenience languages tools
+;; Package-Requires: ((flycheck "0.21-cvs1") (dash "2.0"))
+
+;; This file is NOT part of GNU Emacs.
+;; See LICENSE
+
+;;; Commentary:
+
+;; Adds a Flycheck syntax checker for C/C++ based on clang-tidy.
+
+;;; Code:
+
 (require 'dash)
 (require 'flycheck)
 
