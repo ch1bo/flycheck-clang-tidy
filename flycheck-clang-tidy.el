@@ -38,16 +38,23 @@ See URL `https://github.com/ch1bo/flycheck-clang-tidy'."
   :command ("clang-tidy"
             ;; TODO: clang-tidy expects config file contents, no way to change path
             ;; (config-file "-config=" flycheck-clang-tidy)
-            (option "-p" flycheck-clang-tidy-build-path)
-            source-inplace)
+            ;; TODO: slow! enable it on demand only
+            ;; (option "-p" flycheck-clang-tidy-build-path)
+            source-original)
   :error-patterns
-  ((warning line-start
-            (file-name) ":" line ":" column ": warning: "
-            (message (one-or-more not-newline))
-            line-end))
+  ((error line-start (file-name) ":" line ":" column ": error: "
+          (message) line-end)
+   (warning line-start (file-name) ":" line ":" column ": warning: "
+            (message) line-end))
+  :error-filter
+  (lambda (errors)
+    (seq-remove
+     (lambda (err)
+       (string-match-p (rx "file not found") (flycheck-error-message err))
+       )
+     errors))
   :modes (c-mode c++-mode)
   :working-directory flycheck-clang-tidy-find-default-directory
-  ;; :next-checkers ((warning . haskell-hlint)))
   )
 
 (add-to-list 'flycheck-checkers 'c/c++-clang-tidy)
