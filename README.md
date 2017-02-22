@@ -18,7 +18,7 @@ Then, in your `init.el`:
 
 ```lisp
 (eval-after-load 'flycheck
-  '(require 'flycheck-hdevtools))
+  '(add-hook 'flycheck-mode-hook #'flycheck-clang-tidy-setup))
 ```
 
 Make sure that the `clang-tidy` binary is present on Emacs' `exec-path`, or
@@ -30,6 +30,12 @@ Usage
 
 When `flycheck` is enabled (e.g. with `global-flycheck-mode`), `c-mode` and 
 `c++-mode` buffers will be automatically checked using this checker.
+
+To have `clang-tidy` work correctly, you usally require a compile command
+database as described in `clang-tidy --help`. For example using CMake a file
+named `compile_commands.json` can be created using
+`-DCMAKE_EXPORT_COMPILE_COMMANDS=ON`. `flycheck-clang-tidy` then looks for this
+file via variable `flycheck-clang-tidy-build-path` which defaults to `build`.
 
 [flycheck]: https://github.com/flycheck/flycheck
 [clang-tidy]: http://clang.llvm.org/extra/clang-tidy

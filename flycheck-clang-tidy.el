@@ -13,6 +13,12 @@
 
 ;; Adds a Flycheck syntax checker for C/C++ based on clang-tidy.
 
+;;; Usage:
+
+;;     (eval-after-load 'flycheck
+;;       '(add-hook 'flycheck-mode-hook #'flycheck-clang-tidy-setup))
+
+
 ;;; Code:
 
 (require 'flycheck)
@@ -64,7 +70,10 @@ See URL `https://github.com/ch1bo/flycheck-clang-tidy'."
   :working-directory flycheck-clang-tidy-find-default-directory
   )
 
-(add-to-list 'flycheck-checkers 'c/c++-clang-tidy)
+;;;###autoload
+(defun flycheck-clang-tidy-setup ()
+  "Setup Flycheck clang-tidy."
+  (add-to-list 'flycheck-checkers 'c/c++-clang-tidy))
 
 (provide 'flycheck-clang-tidy)
 ;;; flycheck-clang-tidy.el ends here
