@@ -35,8 +35,10 @@ CMake option to get this output)."
   :safe #'stringp)
 
 (defun flycheck-clang-tidy-find-default-directory (checker)
-  (file-name-directory (flycheck-locate-config-file flycheck-clang-tidy checker))
-  )
+  (let ((config_file_location (flycheck-locate-config-file flycheck-clang-tidy checker)))
+    (if config_file_location
+        (file-name-directory config_file_location)
+      (message "Unable to find config file for %s, you need to create .clang-tidy file in your project root" checker))))
 
 (flycheck-define-checker c/c++-clang-tidy
   "A C/C++ syntax checker using clang-tidy.
