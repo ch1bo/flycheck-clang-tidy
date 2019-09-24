@@ -40,6 +40,10 @@ CMake option to get this output)."
         (file-name-directory config_file_location)
       (message "Unable to find config file for %s, you need to create .clang-tidy file in your project root" checker))))
 
+(defun flycheck-clang-tidy-current-source-dir ()
+  "Directory of current source file."
+  (concat "-I" (file-name-directory (buffer-file-name))))
+
 (flycheck-define-checker c/c++-clang-tidy
   "A C/C++ syntax checker using clang-tidy.
 
@@ -48,7 +52,8 @@ See URL `https://github.com/ch1bo/flycheck-clang-tidy'."
             ;; TODO: clang-tidy expects config file contents, no way to change path
             ;; (config-file "-config=" flycheck-clang-tidy)
             (option "-p" flycheck-clang-tidy-build-path)
-            source-original)
+            (eval (concat "-extra-arg=" (flycheck-clang-tidy-current-source-dir)))
+            source)
   :error-patterns
   ((error line-start (file-name) ":" line ":" column ": error: "
           (message (one-or-more not-newline) "\n"
@@ -70,6 +75,7 @@ See URL `https://github.com/ch1bo/flycheck-clang-tidy'."
          line-end))
   :modes (c-mode c++-mode)
   :working-directory flycheck-clang-tidy-find-default-directory
+  :predicate (lambda () (buffer-file-name))
   )
 
 ;;;###autoload
