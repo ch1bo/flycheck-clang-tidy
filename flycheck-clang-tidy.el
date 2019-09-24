@@ -44,15 +44,22 @@ CMake option to get this output)."
   "Directory of current source file."
   (concat "-I" (file-name-directory (buffer-file-name))))
 
+(defun flycheck-clang-tidy-get-config ()
+  "Find and read .clang-tidy."
+  (let ((config-file (flycheck-locate-config-file flycheck-clang-tidy 0)))
+    (when config-file
+      (with-temp-buffer
+        (insert-file-contents config-file)
+        (buffer-string)))))
+
 (flycheck-define-checker c/c++-clang-tidy
   "A C/C++ syntax checker using clang-tidy.
 
 See URL `https://github.com/ch1bo/flycheck-clang-tidy'."
   :command ("clang-tidy"
-            ;; TODO: clang-tidy expects config file contents, no way to change path
-            ;; (config-file "-config=" flycheck-clang-tidy)
             (option "-p" flycheck-clang-tidy-build-path)
             (eval (concat "-extra-arg=" (flycheck-clang-tidy-current-source-dir)))
+            (eval (concat "-config=" (flycheck-clang-tidy-get-config)))
             source)
   :error-patterns
   ((error line-start (file-name) ":" line ":" column ": error: "
