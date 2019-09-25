@@ -42,16 +42,16 @@ CMake option to get this output)."
   "Find the project root using projectile, vc or the .clang-tidy file."
   (let ((project-root nil))
     (if (member 'projectile-mode minor-mode-list)
-        (setq-local project-root (projectile-project-root)))
+        (setq project-root (projectile-project-root)))
     (unless project-root
-      (setq-local project-root (vc-root-dir)))
+      (setq project-root (vc-root-dir)))
     (unless project-root
       (let ((config_file_location (flycheck-locate-config-file flycheck-clang-tidy checker)))
         (if config_file_location
-            (setq-local project-root (file-name-directory config_file_location)))))
+            (setq project-root (file-name-directory config_file_location)))))
     (unless project-root
       (message "Could not determine project root, trying current directory.")
-      (setq-local project-root (file-name-directory (buffer-file-name))))
+      (setq project-root (file-name-directory (buffer-file-name))))
     project-root))
 
 (defun flycheck-clang-tidy-current-source-dir ()
