@@ -34,11 +34,21 @@ compile_commands.json exists (use -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
 CMake option to get this output)."
   :safe #'stringp)
 
-(defun flycheck-clang-tidy-find-default-directory (checker)
-  (let ((config_file_location (flycheck-locate-config-file flycheck-clang-tidy checker)))
-    (if config_file_location
-        (file-name-directory config_file_location)
-      (message "Unable to find config file for %s, you need to create .clang-tidy file in your project root" checker))))
+(defun flycheck-clang-tidy-find-project-root (checker)
+  "Find the project root using projectile, vc or the .clang-tidy file."
+  (let ((project-root nil))
+    (if (member 'projectile-mode minor-mode-list)
+        (setq-local project-root (projectile-project-root)))
+    (unless project-root
+      (setq-local project-root (vc-root-dir)))
+    (unless project-root
+      (let ((config_file_location (flycheck-locate-config-file flycheck-clang-tidy checker)))
+        (if config_file_location
+            (setq-local project-root (file-name-directory config_file_location)))))
+    (unless project-root
+      (message "Could not determine project root, trying current directory.")
+      (setq-local project-root (file-name-directory (buffer-file-name))))
+    project-root))
 
 (defun flycheck-clang-tidy-current-source-dir ()
   "Directory of current source file."
@@ -81,7 +91,7 @@ See URL `https://github.com/ch1bo/flycheck-clang-tidy'."
                   (one-or-more not-newline))
          line-end))
   :modes (c-mode c++-mode)
-  :working-directory flycheck-clang-tidy-find-default-directory
+  :working-directory flycheck-clang-tidy-find-project-root
   :predicate (lambda () (buffer-file-name))
   )
 
