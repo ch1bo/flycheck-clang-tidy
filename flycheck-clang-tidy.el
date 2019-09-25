@@ -34,6 +34,10 @@ compile_commands.json exists (use -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
 CMake option to get this output)."
   :safe #'stringp)
 
+(flycheck-def-option-var flycheck-clang-tidy-extra-options "" c/c++-clang-tidy
+  "Extra options to pass to clang-tidy."
+  :safe #'stringp)
+
 (defun flycheck-clang-tidy-find-project-root (checker)
   "Find the project root using projectile, vc or the .clang-tidy file."
   (let ((project-root nil))
@@ -70,6 +74,7 @@ See URL `https://github.com/ch1bo/flycheck-clang-tidy'."
             (option "-p" flycheck-clang-tidy-build-path)
             (eval (concat "-extra-arg=" (flycheck-clang-tidy-current-source-dir)))
             (eval (concat "-config=" (flycheck-clang-tidy-get-config)))
+            (eval flycheck-clang-tidy-extra-options)
             source)
   :error-patterns
   ((error line-start (file-name) ":" line ":" column ": error: "
