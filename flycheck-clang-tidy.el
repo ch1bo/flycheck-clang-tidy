@@ -22,7 +22,6 @@
 ;;; Code:
 
 (require 'flycheck)
-(require 'json)
 
 (flycheck-def-config-file-var flycheck-clang-tidy c/c++-clang-tidy ".clang-tidy"
   :safe #'stringp)
@@ -41,54 +40,27 @@ CMake option to get this output)."
         (file-name-directory config_file_location)
       (message "Unable to find config file for %s, you need to create .clang-tidy file in your project root" checker))))
 
-(defun flycheck-clang-tidy-compile-command (file)
-  "Fetch compile command for FILE."
-  (let* ((cmds-file (concat (file-name-as-directory flycheck-clang-tidy-build-path)
-                            "compile_commands.json"))
-         (cmds (json-read-file cmds-file)))
-    (seq-find (lambda (cmd) (string= (alist-get 'file cmd) file)) cmds)))
+(defun flycheck-clang-tidy-current-source-dir ()
+  "Directory of current source file."
+  (concat "-I" (file-name-directory (buffer-file-name))))
 
-(defun flycheck-clang-tidy-temp-compile-command (file source)
-  "Return compile command for FILE with source located in SOURCE."
-  (let* ((cmd (flycheck-clang-tidy-compile-command file))
-         (directory (alist-get 'directory cmd))
-         (command (alist-get 'command cmd)))
-    (list (cons 'directory directory)
-          (cons 'command (replace-regexp-in-string (regexp-quote file)
-                                                   source command))
-          (cons 'file source))))
-
-(defun flycheck-clang-tidy-make-temp-compile-command (file source)
-  "Create a temporary build command file for FILE with SOURCE."
-  (let* ((directory (flycheck-temp-dir-system))
-         (cmds-dir (file-name-as-directory (make-temp-name (expand-file-name "flycheck" directory))))
-         (cmds-file (concat cmds-dir "compile_commands.json"))
-         (cmd (flycheck-clang-tidy-temp-compile-command file source)))
-    (prog1 cmds-dir
-      (mkdir cmds-dir)
-      (with-temp-file cmds-file
-        (insert (json-encode (vector cmd)))))))
-
-(defun flycheck-clang-tidy-inplace-build-command ()
-  "Generate temporary compile_commands.json file.
-
-This functions parses the compile_commands.json file and generate
-a new one for the flycheck temporary source file so that
-clang-tidy understand what to do with it."
-  (let ((source (flycheck-save-buffer-to-temp #'flycheck-temp-file-inplace)))
-    (format "-p=%s"
-            (flycheck-clang-tidy-make-temp-compile-command (buffer-file-name)
-                                                           source))))
+(defun flycheck-clang-tidy-get-config ()
+  "Find and read .clang-tidy."
+  (let ((config-file (flycheck-locate-config-file flycheck-clang-tidy 0)))
+    (when config-file
+      (with-temp-buffer
+        (insert-file-contents config-file)
+        (buffer-string)))))
 
 (flycheck-define-checker c/c++-clang-tidy
   "A C/C++ syntax checker using clang-tidy.
 
 See URL `https://github.com/ch1bo/flycheck-clang-tidy'."
   :command ("clang-tidy"
-            ;; TODO: clang-tidy expects config file contents, no way to change path
-            ;; (config-file "-config=" flycheck-clang-tidy)
-            (eval (flycheck-clang-tidy-inplace-build-command))
-            (eval (flycheck-save-buffer-to-temp #'flycheck-temp-file-inplace)))
+            (option "-p" flycheck-clang-tidy-build-path)
+            (eval (concat "-extra-arg=" (flycheck-clang-tidy-current-source-dir)))
+            (eval (concat "-config=" (flycheck-clang-tidy-get-config)))
+            source)
   :error-patterns
   ((error line-start (file-name) ":" line ":" column ": error: "
           (message (one-or-more not-newline) "\n"
@@ -110,6 +82,7 @@ See URL `https://github.com/ch1bo/flycheck-clang-tidy'."
          line-end))
   :modes (c-mode c++-mode)
   :working-directory flycheck-clang-tidy-find-default-directory
+  :predicate (lambda () (buffer-file-name))
   )
 
 ;;;###autoload
