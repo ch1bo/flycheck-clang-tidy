@@ -11,7 +11,7 @@ You'll need Emacs 24 for `flycheck`, so the recommended way to get
 `flycheck-clang-tidy` is as a package from the [MELPA][melpa]
 repository.
 
-Alternatively you have to ensure `flycheck` is installed, then 
+Alternatively you have to ensure `flycheck` is installed, then
 download this code and add the directory to your Emacs `load-path`.
 
 Then, in your `init.el`:
@@ -21,6 +21,16 @@ Then, in your `init.el`:
   '(add-hook 'flycheck-mode-hook #'flycheck-clang-tidy-setup))
 ```
 
+Or, if you use [use-package][]:
+
+``` emacs-lisp
+(use-package flycheck-clang-tidy
+  :after flycheck
+  :hook
+  (flycheck-mode . flycheck-clang-tidy-setup)
+  )
+```
+
 Make sure that the `clang-tidy` binary is present on Emacs' `exec-path`, or
 customize `flycheck-clang-tidy-executable` to point to the `clang-tidy`
 binary.
@@ -28,7 +38,7 @@ binary.
 Usage
 -----
 
-When `flycheck` is enabled (e.g. with `global-flycheck-mode`), `c-mode` and 
+When `flycheck` is enabled (e.g. with `global-flycheck-mode`), `c-mode` and
 `c++-mode` buffers will be automatically checked using this checker.
 
 To have `clang-tidy` work correctly, you usally require a compile command
@@ -37,6 +47,10 @@ named `compile_commands.json` can be created using
 `-DCMAKE_EXPORT_COMPILE_COMMANDS=ON`. `flycheck-clang-tidy` then looks for this
 file via variable `flycheck-clang-tidy-build-path` which defaults to `build`.
 
+You can pass additional options to `clang-tidy` using the variable
+`flycheck-clang-tidy-extra-options`.
+
 [flycheck]: https://github.com/flycheck/flycheck
 [clang-tidy]: http://clang.llvm.org/extra/clang-tidy
 [melpa]: http://melpa.org
+[use-package]: https://github.com/jwiegley/use-package
