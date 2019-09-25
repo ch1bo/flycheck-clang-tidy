@@ -1,6 +1,7 @@
 ;;; flycheck-clang-tidy.el --- Flycheck syntax checker using clang-tidy
 
 ;; Author: Sebastian Nagel<sebastian.nagel@ncoding.at>
+;; Maintainer: tastytea <tastytea@tastytea.de>
 ;; URL: https://github.com/ch1bo/flycheck-clang-tidy
 ;; Keywords: convenience languages tools
 ;; Package-Version: 0.1.0
