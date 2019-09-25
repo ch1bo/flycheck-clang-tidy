@@ -47,6 +47,9 @@ named `compile_commands.json` can be created using
 `-DCMAKE_EXPORT_COMPILE_COMMANDS=ON`. `flycheck-clang-tidy` then looks for this
 file via variable `flycheck-clang-tidy-build-path` which defaults to `build`.
 
+You can pass additional options to `clang-tidy` using the variable
+`flycheck-clang-tidy-extra-options`.
+
 [flycheck]: https://github.com/flycheck/flycheck
 [clang-tidy]: http://clang.llvm.org/extra/clang-tidy
 [melpa]: http://melpa.org
