@@ -3,7 +3,7 @@
 ;; Author: Sebastian Nagel<sebastian.nagel@ncoding.at>
 ;; URL: https://github.com/ch1bo/flycheck-clang-tidy
 ;; Keywords: convenience languages tools
-;; Package-Version: 0.0.1
+;; Package-Version: 0.1.0
 ;; Package-Requires: ((flycheck "0.30"))
 
 ;; This file is NOT part of GNU Emacs.
