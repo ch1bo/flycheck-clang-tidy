@@ -35,8 +35,8 @@ compile_commands.json exists (use -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
 CMake option to get this output)."
   :safe #'stringp)
 
-(flycheck-def-option-var flycheck-clang-tidy-extra-options "" c/c++-clang-tidy
-  "Extra options to pass to clang-tidy."
+(flycheck-def-option-var flycheck-clang-tidy-extra-options nil c/c++-clang-tidy
+  "Extra options to pass to clang-tidy. Set to `nil' to disable."
   :safe #'stringp)
 
 (defun flycheck-clang-tidy-find-project-root (checker)
