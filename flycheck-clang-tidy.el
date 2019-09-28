@@ -25,6 +25,7 @@
 (require 'flycheck)
 
 (flycheck-def-config-file-var flycheck-clang-tidy c/c++-clang-tidy ".clang-tidy"
+  :type 'string
   :safe #'stringp)
 
 (flycheck-def-option-var flycheck-clang-tidy-build-path "build" c/c++-clang-tidy
@@ -33,10 +34,12 @@
 For example, it can be a CMake build directory in which a file named
 compile_commands.json exists (use -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
 CMake option to get this output)."
+  :type 'string
   :safe #'stringp)
 
 (flycheck-def-option-var flycheck-clang-tidy-extra-options nil c/c++-clang-tidy
   "Extra options to pass to clang-tidy. Set to `nil' to disable."
+  :type 'string
   :safe #'stringp)
 
 (defun flycheck-clang-tidy-find-project-root (checker)
