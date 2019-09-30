@@ -102,6 +102,7 @@ See URL `https://github.com/ch1bo/flycheck-clang-tidy'."
   :modes (c-mode c++-mode)
   :working-directory flycheck-clang-tidy-find-project-root
   :predicate (lambda () (buffer-file-name))
+  :next-checkers ((error . c/c++-cppcheck))
   )
 
 ;;;###autoload
