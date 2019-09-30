@@ -82,23 +82,11 @@ See URL `https://github.com/ch1bo/flycheck-clang-tidy'."
             source)
   :error-patterns
   ((error line-start (file-name) ":" line ":" column ": error: "
-          (message (one-or-more not-newline) "\n"
-                   (one-or-more not-newline) "\n"
-                   (one-or-more not-newline) "\n"
-                   (one-or-more not-newline))
-          line-end)
+          (message) line-end)
    (warning line-start (file-name) ":" line ":" column ": warning: "
-            (message (one-or-more not-newline) "\n"
-                     (one-or-more not-newline) "\n"
-                     (one-or-more not-newline) "\n"
-                     (one-or-more not-newline))
-            line-end)
+            (message) line-end)
    (info line-start (file-name) ":" line ":" column ": note: "
-         (message (one-or-more not-newline) "\n"
-                  (one-or-more not-newline) "\n"
-                  (one-or-more not-newline) "\n"
-                  (one-or-more not-newline))
-         line-end))
+         (message) line-end))
   :modes (c-mode c++-mode)
   :working-directory flycheck-clang-tidy-find-project-root
   :predicate (lambda () (buffer-file-name))
