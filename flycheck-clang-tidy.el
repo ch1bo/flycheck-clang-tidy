@@ -4,7 +4,7 @@
 ;; Maintainer: tastytea <tastytea@tastytea.de>
 ;; URL: https://github.com/ch1bo/flycheck-clang-tidy
 ;; Keywords: convenience languages tools
-;; Package-Version: 0.1.1
+;; Package-Version: 0.2.0
 ;; Package-Requires: ((flycheck "0.30"))
 
 ;; This file is NOT part of GNU Emacs.
