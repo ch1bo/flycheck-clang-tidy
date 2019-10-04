@@ -24,6 +24,9 @@
 
 (require 'flycheck)
 
+;; To keep variable names consistent.
+(defvaralias 'flycheck-clang-tidy-executable 'flycheck-c/c++-clang-tidy-executable)
+
 (flycheck-def-config-file-var flycheck-clang-tidy c/c++-clang-tidy ".clang-tidy"
   :type 'string
   :safe #'stringp)

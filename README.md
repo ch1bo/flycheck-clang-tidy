@@ -32,7 +32,7 @@ Or, if you use [use-package][]:
 ```
 
 Make sure that the `clang-tidy` binary is present on Emacs' `exec-path`, or
-customize `flycheck-c/c++-clang-tidy-executable` to point to the `clang-tidy`
+customize `flycheck-clang-tidy-executable` to point to the `clang-tidy`
 binary.
 
 Usage
