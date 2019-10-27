@@ -46,7 +46,7 @@ CMake option to get this output)."
   :safe #'stringp)
 
 (defun flycheck-clang-tidy-find-project-root (checker)
-  "Find the project root using projectile, vc or the .clang-tidy file."
+  "Find the project root for CHECKER using Projectile, vc or the .clang-tidy file."
   (let ((project-root nil))
     (if (member 'projectile-mode minor-mode-list)
         (setq project-root (projectile-project-root)))
