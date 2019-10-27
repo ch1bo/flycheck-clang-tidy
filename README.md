@@ -50,6 +50,11 @@ file via variable `flycheck-clang-tidy-build-path` which defaults to `build`.
 You can pass additional options to `clang-tidy` using the variable
 `flycheck-clang-tidy-extra-options`.
 
+This checker includes an error explainer. Invoking `flycheck-explain-error-at-point`
+will search clang.llvm.org for the documentation of the clang-tidy check under point
+and render the result HTML in a Help buffer. This requires that Emacs is
+compiled with XML support.
+
 [flycheck]: https://github.com/flycheck/flycheck
 [clang-tidy]: http://clang.llvm.org/extra/clang-tidy
 [melpa]: http://melpa.org
