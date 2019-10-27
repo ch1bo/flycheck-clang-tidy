@@ -1,4 +1,4 @@
-;;; flycheck-clang-tidy.el --- Flycheck syntax checker using clang-tidy
+;;; flycheck-clang-tidy.el --- Flycheck syntax checker using clang-tidy -*- lexical-binding:t -*-
 
 ;; Author: Sebastian Nagel<sebastian.nagel@ncoding.at>
 ;; Maintainer: tastytea <tastytea@tastytea.de>
