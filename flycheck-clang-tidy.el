@@ -23,6 +23,7 @@
 ;;; Code:
 
 (require 'flycheck)
+(require 'dom)
 
 ;; To keep variable names consistent.
 (defvaralias 'flycheck-clang-tidy-executable 'flycheck-c/c++-clang-tidy-executable)
