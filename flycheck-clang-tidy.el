@@ -180,8 +180,7 @@ See URL `https://github.com/ch1bo/flycheck-clang-tidy'."
   :working-directory flycheck-clang-tidy-find-project-root
   :error-explainer flycheck-clang-tidy-error-explainer
   :predicate (lambda () (buffer-file-name))
-  :next-checkers ((error . c/c++-cppcheck))
-  )
+  :next-checkers ((error . c/c++-cppcheck)))
 
 ;;;###autoload
 (defun flycheck-clang-tidy-setup ()
