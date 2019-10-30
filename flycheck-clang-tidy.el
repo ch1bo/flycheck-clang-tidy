@@ -59,12 +59,12 @@ CMake option to get this output)."
             (setq project-root (file-name-directory config_file_location)))))
     (unless project-root
       (message "Could not determine project root, trying current directory.")
-      (setq project-root (file-name-directory (buffer-file-name))))
+      (setq project-root (flycheck-clang-tidy-current-source-dir)))
     project-root))
 
 (defun flycheck-clang-tidy-current-source-dir ()
   "Directory of current source file."
-  (concat "-I" (file-name-directory (buffer-file-name))))
+  (file-name-directory (buffer-file-name)))
 
 (defun flycheck-clang-tidy-get-config ()
   "Find and read .clang-tidy."
@@ -166,7 +166,7 @@ Information comes from the clang.llvm.org website."
 See URL `https://github.com/ch1bo/flycheck-clang-tidy'."
   :command ("clang-tidy"
             (option "-p" flycheck-clang-tidy-build-path)
-            (eval (concat "-extra-arg=" (flycheck-clang-tidy-current-source-dir)))
+            (eval (concat "-extra-arg=-I" (flycheck-clang-tidy-current-source-dir)))
             (eval (concat "-config=" (flycheck-clang-tidy-get-config)))
             (eval flycheck-clang-tidy-extra-options)
             source)
