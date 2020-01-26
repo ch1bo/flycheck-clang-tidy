@@ -55,7 +55,15 @@ will search clang.llvm.org for the documentation of the clang-tidy check under p
 and render the result HTML in a Help buffer. This requires that Emacs is
 compiled with XML support.
 
+Other solutions
+---------------
+
+If you use [lsp-mode][] with [clangd][clangd-ct] 9.0 or above, you can use the
+embedded clang-tidy by adding `--clang-tidy` to `lsp-clients-clangd-args`.
+
 [flycheck]: https://github.com/flycheck/flycheck
 [clang-tidy]: http://clang.llvm.org/extra/clang-tidy
 [melpa]: http://melpa.org
 [use-package]: https://github.com/jwiegley/use-package
+[lsp-mode]: https://github.com/emacs-lsp/lsp-mode
+[clangd-ct]: https://clang.llvm.org/extra/clangd/Features.html#clang-tidy-checks
