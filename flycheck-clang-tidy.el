@@ -67,12 +67,14 @@ CMake option to get this output)."
   (file-name-directory (buffer-file-name)))
 
 (defun flycheck-clang-tidy-get-config ()
-  "Find and read .clang-tidy."
-  (let ((config-file (flycheck-locate-config-file flycheck-clang-tidy 0)))
-    (when config-file
-      (with-temp-buffer
-        (insert-file-contents config-file)
-        (buffer-string)))))
+  "Find and read .clang-tidy if `flycheck-clang-tidy' is set."
+  (if flycheck-clang-tidy
+      (let ((config-file (flycheck-locate-config-file flycheck-clang-tidy 0)))
+        (when config-file
+          (with-temp-buffer
+            (insert-file-contents config-file)
+            (buffer-string))))
+    ""))
 
 (defun flycheck-clang-tidy--skip-http-headers ()
   "Position point just after HTTP headers."
