@@ -55,6 +55,20 @@ will search clang.llvm.org for the documentation of the clang-tidy check under p
 and render the result HTML in a Help buffer. This requires that Emacs is
 compiled with XML support.
 
+Known problems
+--------------
+
+When `clang-tidy` is run via docker, the config file is unquoted before it
+reaches the process which means that it can't be parsed. The recommended
+workaround is to add an advice around `flycheck-clang-tidy-get-config` and quote
+the config file a second time.
+
+``` emacs-lisp
+(advice-add 'flycheck-clang-tidy-get-config :around
+            (lambda (original-function)
+              (shell-quote-argument (funcall original-function))))
+```
+
 Other solutions
 ---------------
 
