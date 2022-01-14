@@ -171,7 +171,7 @@ See URL `https://github.com/ch1bo/flycheck-clang-tidy'."
             (eval (concat "-extra-arg=-I" (flycheck-clang-tidy-current-source-dir)))
             (eval (concat "-config=" (flycheck-clang-tidy-get-config)))
             (eval flycheck-clang-tidy-extra-options)
-            source)
+            source-original)
   :error-patterns
   ((error line-start (file-name) ":" line ":" column ": error: "
           (message) line-end)
