@@ -46,6 +46,14 @@ CMake option to get this output)."
   :type 'string
   :safe #'stringp)
 
+(flycheck-def-option-var flycheck-clang-tidy-source-original nil c/c++-clang-tidy
+  "Set this to `non-nil' to use original C++ source as input to clang-tidy
+rather than a temporary file.  Drawback is that any unsaved change in the
+buffer will not be included. This may need to be enabled on old OS such as
+CentOS 7 where clang-tidy fails to work when using temporary files."
+  :type 'boolean
+  :safe #'booleanp)
+
 (defun flycheck-clang-tidy-find-project-root (checker)
   "Find the project root for CHECKER using Projectile, vc or the .clang-tidy file."
   (let ((project-root nil))
@@ -171,7 +179,11 @@ See URL `https://github.com/ch1bo/flycheck-clang-tidy'."
             (eval (concat "-extra-arg=-I" (flycheck-clang-tidy-current-source-dir)))
             (eval (concat "-config=" (flycheck-clang-tidy-get-config)))
             (eval flycheck-clang-tidy-extra-options)
-            source)
+            ;; Use 'source-original or 'source depending on user option. The
+            ;; code was lifted from flycheck-substitute-argument.
+            (eval (if flycheck-clang-tidy-source-original
+                      (or (buffer-file-name) "")
+                    (flycheck-save-buffer-to-temp #'flycheck-temp-file-system))))
   :error-patterns
   ((error line-start (file-name) ":" line ":" column ": error: "
           (message) line-end)
@@ -182,7 +194,10 @@ See URL `https://github.com/ch1bo/flycheck-clang-tidy'."
   :modes (c-mode c++-mode)
   :working-directory flycheck-clang-tidy-find-project-root
   :error-explainer flycheck-clang-tidy-error-explainer
-  :predicate (lambda () (buffer-file-name))
+  :predicate (lambda () (if flycheck-clang-tidy-source-original
+                            (flycheck-buffer-saved-p)
+                          (buffer-file-name)))
+
   :next-checkers ((error . c/c++-cppcheck)))
 
 ;;;###autoload
